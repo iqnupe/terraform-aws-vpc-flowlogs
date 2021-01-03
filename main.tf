@@ -50,7 +50,7 @@ resource "aws_s3_bucket" "this" {
     }
   }
 
-  tags = coalescelist(var.s3.tags, var.tags)
+  tags = var.s3.tags == null ? var.tags : var.s3.tags
 
   lifecycle {
     ignore_changes = [tags, ]
