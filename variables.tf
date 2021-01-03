@@ -31,7 +31,7 @@ variable "s3" {
     tags = {}
   }
   validation {
-    condition     = var.s3.lifecycle.expiration_days < var.s3.lifecycle.transition_days
+    condition     = var.s3.lifecycle.expiration_days > var.s3.lifecycle.transition_days
     error_message = "The lifecycle expiration days must be greater than the transition days."
   }
 }
