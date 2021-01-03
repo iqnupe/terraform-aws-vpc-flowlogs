@@ -7,6 +7,10 @@ resource "aws_flow_log" "this" {
   traffic_type         = "ALL"
   vpc_id               = var.vpc_id
   tags                 = var.tags
+
+  lifecycle {
+    ignore_changes = [tags, ]
+  }
 }
 
 #
@@ -47,6 +51,10 @@ resource "aws_s3_bucket" "this" {
   }
 
   tags = coalescelist(var.s3.tags, var.tags)
+
+  lifecycle {
+    ignore_changes = [tags, ]
+  }
 }
 
 resource "aws_s3_bucket_policy" "default" {
