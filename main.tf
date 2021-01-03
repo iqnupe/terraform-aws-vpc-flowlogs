@@ -17,8 +17,9 @@ resource "aws_flow_log" "this" {
 # Bucket to store VPC flow logs.
 #
 resource "aws_s3_bucket" "this" {
-  bucket = coalesce(var.s3.prefix, var.s3.bucket)
-  acl    = "private"
+  bucket        = coalesce(var.s3.prefix, var.s3.bucket)
+  acl           = "private"
+  force_destroy = true
 
   # Versioning will not be needed for this
   versioning {
