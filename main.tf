@@ -6,13 +6,14 @@ resource "aws_flow_log" "this" {
   log_destination_type = "s3"
   traffic_type         = "ALL"
   vpc_id               = var.vpc_id
+  tags                 = var.tags
 }
 
 #
 # Bucket to store VPC flow logs.
 #
 resource "aws_s3_bucket" "this" {
-  bucket = "${var.bucket_name_prefix}-vpc-flowlogs"
+  bucket = coalesce(var.s3.prefix, var.s3.bucket)
   acl    = "private"
 
   # Versioning will not be needed for this
@@ -36,16 +37,16 @@ resource "aws_s3_bucket" "this" {
     enabled = true
 
     transition {
-      days          = 30
+      days          = var.s3.lifecycle.transition_days
       storage_class = "STANDARD_IA"
     }
 
     expiration {
-      days = 60
+      days = var.s3.lifecycle.expiration_days
     }
   }
 
-  tags = var.tags
+  tags = coalescelist(var.s3.tags, var.tags)
 }
 
 resource "aws_s3_bucket_policy" "default" {
